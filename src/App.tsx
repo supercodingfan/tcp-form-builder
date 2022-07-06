@@ -1,7 +1,19 @@
-import React from 'react';
+import { FC } from 'react';
+import { ThemeProvider } from '@mui/material/styles';
+import { Box, CssBaseline } from '@mui/material';
 
-function App() {
-  return <div className="App"></div>;
-}
+import { theme } from './styles/theme';
+import FormBuilder from './pages/FormBuilder';
+
+const App: FC = () => {
+  return (
+    <ThemeProvider theme={theme}>
+      <Box>
+        <CssBaseline />
+        <FormBuilder />
+      </Box>
+    </ThemeProvider>
+  );
+};
 
 export default App;
