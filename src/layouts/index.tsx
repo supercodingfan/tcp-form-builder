@@ -17,7 +17,9 @@ const Layout: FC<Props> = ({ children }: Props) => {
         <Sidebar />
         <S.MainContainer>
           <S.ContextBox component="main">
-            <Header />
+            <Box>
+              <Header />
+            </Box>
             {children}
           </S.ContextBox>
           <Footer />

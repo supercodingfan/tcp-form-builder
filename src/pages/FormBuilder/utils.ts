@@ -1,4 +1,4 @@
-import { Tab } from '../../types';
+import { Tab } from 'types';
 
 export const tabs: Tab[] = [
   { label: 'Design Form', value: 0 },

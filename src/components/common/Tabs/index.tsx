@@ -1,6 +1,6 @@
 import { FC, SyntheticEvent } from 'react';
 
-import { Tab } from '../../types';
+import { Tab } from '../../../types';
 
 import * as S from './styled';
 
@@ -8,9 +8,15 @@ interface Props {
   selected: number;
   tabs: Tab[];
   onChangeTab: (val: number) => void;
+  indicatorColor?: 'secondary' | 'primary' | undefined;
 }
 
-const Tabs: FC<Props> = ({ selected, tabs, onChangeTab }: Props) => {
+const Tabs: FC<Props> = ({
+  selected,
+  tabs,
+  onChangeTab,
+  indicatorColor,
+}: Props) => {
   const a11yProps = (index: number) => {
     return {
       id: `simple-tab-${index}`,
@@ -23,7 +29,13 @@ const Tabs: FC<Props> = ({ selected, tabs, onChangeTab }: Props) => {
   };
 
   return (
-    <S.Tabs value={selected} onChange={onChange}>
+    <S.Tabs
+      value={selected}
+      onChange={onChange}
+      variant="scrollable"
+      allowScrollButtonsMobile
+      indicatorColor={indicatorColor}
+    >
       {tabs.map((tab) => (
         <S.Tab
           key={tab.value}

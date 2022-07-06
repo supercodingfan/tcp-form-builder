@@ -12,4 +12,6 @@ export const ContextBox = styled(Box)`
   flex-grow: 1;
   background-color: white;
   border-top-left-radius: 50px;
+  display: flex;
+  flex-direction: column;
 `;
