@@ -124,7 +124,7 @@ const Drawer: FC = () => {
             </ListItemButton>
           </ListItem>
         </List>
-        <Divider />
+        <Divider style={{ backgroundColor: 'white' }} />
         <List>
           <ListItem disablePadding sx={{ display: 'block' }}>
             <ListItemButton
