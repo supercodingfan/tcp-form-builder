@@ -48,7 +48,6 @@ export const Drawer = styled(MuiDrawer, {
 }));
 
 export const DrawerBody = styled(Box)`
-  padding-top: 40px;
   padding-bottom: 200px;
   display: flex;
   flex-direction: column;

@@ -26,7 +26,7 @@ const Drawer: FC = () => {
 
   return (
     <S.Drawer variant="permanent" open={open}>
-      <S.DrawerBody>
+      <S.DrawerBody pt={18}>
         <List>
           <ListItem disablePadding sx={{ display: 'block' }}>
             <ListItemButton
@@ -75,7 +75,7 @@ const Drawer: FC = () => {
             </ListItemButton>
           </ListItem>
         </List>
-        <Box sx={{ flexGrow: 1 }} />
+        <Box mb={36} />
         <List>
           <ListItem disablePadding sx={{ display: 'block' }}>
             <ListItemButton

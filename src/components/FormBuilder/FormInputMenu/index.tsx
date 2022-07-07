@@ -38,13 +38,15 @@ const FormInputMenu: FC<Props> = ({ menu }: Props) => {
             )}
           </IconButton>
         </S.TitleContainer>
-        <Tabs
-          selected={tab}
-          tabs={tabs}
-          onChangeTab={onChangeTab}
-          indicatorColor="secondary"
-        />
-        <FormInputList menu={menu} />
+        {open && (
+          <Tabs
+            selected={tab}
+            tabs={tabs}
+            onChangeTab={onChangeTab}
+            indicatorColor="secondary"
+          />
+        )}
+        {open && <FormInputList menu={menu} />}
       </S.DrawerBody>
     </S.FormInputMenu>
   );
