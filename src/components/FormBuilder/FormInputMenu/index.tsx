@@ -3,12 +3,17 @@ import { IconButton } from '@mui/material';
 import { ChevronLeftOutlined, ChevronRightOutlined } from '@mui/icons-material';
 
 import Tabs from 'components/common/Tabs';
+import { FormInputItem } from 'types';
 
 import FormInputList from './FormInputList';
 import { tabs } from './utils';
 import * as S from './styled';
 
-const FormInputMenu: FC = () => {
+interface Props {
+  menu: FormInputItem[];
+}
+
+const FormInputMenu: FC<Props> = ({ menu }: Props) => {
   const [open, setOpen] = useState<boolean>(true);
   const [tab, setTab] = useState<number>(tabs[0].value);
 
@@ -39,7 +44,7 @@ const FormInputMenu: FC = () => {
           onChangeTab={onChangeTab}
           indicatorColor="secondary"
         />
-        <FormInputList />
+        <FormInputList menu={menu} />
       </S.DrawerBody>
     </S.FormInputMenu>
   );

@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { Drawer as MuiDrawer, Box, Typography } from '@mui/material';
 
-const drawerWidth = 240;
+const drawerWidth = 270;
 
 export const FormInputMenu = styled(MuiDrawer, {
   shouldForwardProp: (props) => props !== 'open',
