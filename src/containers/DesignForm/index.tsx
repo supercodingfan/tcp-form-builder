@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { Box, Paper } from '@mui/material';
 
 import FormInputMenu from 'components/FormBuilder/FormInputMenu';
+import FormPage from 'components/FormBuilder/FormPage';
 
 import { formInputMenu } from './utils';
 import * as S from './styled';
@@ -22,7 +23,7 @@ const DesignForm: FC = () => {
           >
             <S.PageNumber>Page 1</S.PageNumber>
           </Box>
-          <Paper style={{ height: '300px' }} />
+          <FormPage />
         </Box>
         <Box>
           <Box
@@ -40,7 +41,7 @@ const DesignForm: FC = () => {
             </Box>
             <S.PageNumber>Page 2</S.PageNumber>
           </Box>
-          <Paper style={{ height: '300px' }} />
+          <FormPage />
         </Box>
       </S.PageContainer>
     </S.DesignFormContainer>

@@ -5,6 +5,7 @@ export type Tab = {
 
 export type FormInputItem = {
   label: string;
+  name: string;
   format: string;
   type: string;
 };
