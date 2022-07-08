@@ -9,3 +9,19 @@ export type FormInputItem = {
   format: string;
   type: string;
 };
+
+export type Component = {
+  id: string;
+  label: string;
+  name: string;
+  width: number;
+  value: string;
+  type: string;
+  options?: { label: string; value: string }[];
+};
+
+export type PageItem = {
+  id: string;
+  isLast: boolean;
+  components: Component[];
+};

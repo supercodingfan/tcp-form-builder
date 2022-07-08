@@ -21,15 +21,7 @@ const FormBuilder: FC = () => {
     <Layout>
       <S.FormBuilderContainer>
         <Tabs selected={tab} tabs={tabs} onChangeTab={onChangeTab} />
-        <TabPanel value={tab} index={0}>
-          <DesignForm />
-        </TabPanel>
-        <TabPanel value={tab} index={1}>
-          <FormSettings />
-        </TabPanel>
-        <TabPanel value={tab} index={2}>
-          <DataModel />
-        </TabPanel>
+        <DesignForm />
       </S.FormBuilderContainer>
     </Layout>
   );
