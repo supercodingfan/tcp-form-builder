@@ -1,35 +1,17 @@
-import { FC, useState, useEffect } from 'react';
+import { FC } from 'react';
 import { Box } from '@mui/material';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { v4 as uuid } from 'uuid';
 
 import FormInputMenu from 'components/FormBuilder/FormInputMenu';
 import FormPage from 'components/FormBuilder/FormPage';
-import { PageItem } from 'types';
+import { useFormBuilder } from 'provider/FormBuilderProvider';
 
 import { formInputMenu } from './utils';
 import * as S from './styled';
 
 const DesignForm: FC = () => {
-  const [pages, setPages] = useState<PageItem[]>([]);
-
-  useEffect(() => {
-    setPages([{ id: uuid(), isLast: true, components: [] }]);
-  }, []);
-
-  const onAddPage = (id: string) => {
-    const page = pages.findIndex((page) => page.id === id);
-    setPages([
-      ...pages.slice(0, page),
-      {
-        id: uuid(),
-        isLast: false,
-        components: [],
-      },
-      ...pages.slice(page),
-    ]);
-  };
+  const [{ pages }, { onAddPage }] = useFormBuilder();
 
   return (
     <DndProvider backend={HTML5Backend}>

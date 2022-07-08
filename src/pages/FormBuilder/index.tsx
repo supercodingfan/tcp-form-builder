@@ -2,10 +2,8 @@ import { FC, useState } from 'react';
 
 import Layout from 'layouts';
 import Tabs from 'components/common/Tabs';
-import TabPanel from 'layouts/TabPanel';
-import FormSettings from 'containers/FormSettings';
 import DesignForm from 'containers/DesignForm';
-import DataModel from 'containers/DataModel';
+import { FormBuilderProvider } from 'provider/FormBuilderProvider';
 
 import { tabs } from './utils';
 import * as S from './styled';
@@ -19,10 +17,12 @@ const FormBuilder: FC = () => {
 
   return (
     <Layout>
-      <S.FormBuilderContainer>
-        <Tabs selected={tab} tabs={tabs} onChangeTab={onChangeTab} />
-        <DesignForm />
-      </S.FormBuilderContainer>
+      <FormBuilderProvider>
+        <S.FormBuilderContainer>
+          <Tabs selected={tab} tabs={tabs} onChangeTab={onChangeTab} />
+          <DesignForm />
+        </S.FormBuilderContainer>
+      </FormBuilderProvider>
     </Layout>
   );
 };

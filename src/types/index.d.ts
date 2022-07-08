@@ -25,3 +25,9 @@ export type PageItem = {
   isLast: boolean;
   components: Component[];
 };
+
+export type DragAndDropItem = {
+  label: string;
+  name: string;
+  type: string;
+};

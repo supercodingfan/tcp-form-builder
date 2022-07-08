@@ -16,22 +16,14 @@ interface Props {
   label: string;
   width: number;
   value: string;
-  onAdd: (id: string, name: string, label: string, type: string) => void;
   onChange: (id: string, value: string) => void;
 }
 
-const FormItem: FC<Props> = ({
-  id,
-  label,
-  value,
-  width,
-  onAdd,
-  onChange,
-}: Props) => {
+const FormItem: FC<Props> = ({ id, label, value, width, onChange }: Props) => {
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: 'FormInput',
     drop: (item: any, monitor) => {
-      onAdd(id, item.name, item.label, item.type);
+      // onAdd(id, item.name, item.label, item.type);
     },
     collect: (monitor) => ({
       isOver: monitor.isOver(),
