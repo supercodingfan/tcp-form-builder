@@ -17,7 +17,11 @@ const FormPage: FC<Props> = ({ item: { id, isLast, components } }: Props) => {
   const [, { onAddComponent }] = useFormBuilder();
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: 'FormInput',
-    drop: (item: DragAndDropItem) => {
+    drop: (item: DragAndDropItem, monitor) => {
+      const didDrop = monitor.didDrop();
+      if (didDrop) {
+        return;
+      }
       onAddComponent(id, {
         id: uuid(),
         ...item,
@@ -31,26 +35,11 @@ const FormPage: FC<Props> = ({ item: { id, isLast, components } }: Props) => {
     }),
   }));
 
-  const onChange = (id: string, value: string) => {
-    // setComponents([
-    //   ...components.map((item) => (item.id === id ? { ...item, value } : item)),
-    // ]);
-  };
-
   return (
     <S.FormPage>
-      <Grid container spacing={1} flexGrow={1} ref={drop}>
+      <Grid container spacing={1} flexGrow={1} ref={drop} pb={2}>
         {components.map((item) => {
-          return (
-            <FormItem
-              key={item.id}
-              id={item.id}
-              width={item.width}
-              label={item.label}
-              value={item.value}
-              onChange={onChange}
-            />
-          );
+          return <FormItem key={item.id} component={item} pageId={id} />;
         })}
       </Grid>
       <Box display="flex" justifyContent="end">

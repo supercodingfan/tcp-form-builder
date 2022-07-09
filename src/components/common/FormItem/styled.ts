@@ -10,9 +10,15 @@ export const FormItem = styled(Box)`
   box-sizing: border-box;
   padding: 10px 20px 20px 5px;
   width: 100%;
+  & .icon-move {
+    opacity: 0;
+  }
   &:hover {
     border: 1px dashed #3580ff;
     border-radius: 10px;
+    & .icon-move {
+      opacity: 1;
+    }
   }
 `;
 

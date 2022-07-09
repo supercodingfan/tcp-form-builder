@@ -42,8 +42,73 @@ export const FormBuilderProvider: FC<Props> = ({ children }: Props) => {
   };
 
   const onUpdate = (id: string, components: Component[]) => {
-    setPages([
+    setPages((pages) => [
       ...pages.map((page) => (page.id === id ? { ...page, components } : page)),
+    ]);
+  };
+
+  const onAddBetween = (
+    pageId: string,
+    componentId: string,
+    type: string,
+    component: Component
+  ) => {
+    setPages((pages) => [
+      ...pages.map((page) => {
+        if (page.id === pageId) {
+          const index = page.components.findIndex(
+            (item) => item.id === componentId
+          );
+          if (index === 0 && type === 'prev') {
+            return { ...page, components: [component, ...page.components] };
+          }
+          if (index === page.components.length - 1 && type === 'next') {
+            return { ...page, components: [...page.components, component] };
+          }
+          if (type === 'prev') {
+            return {
+              ...page,
+              components: [
+                ...page.components.slice(0, index - 1),
+                component,
+                ...page.components.slice(index - 1),
+              ],
+            };
+          }
+          return {
+            ...page,
+            components: [
+              ...page.components.slice(0, index),
+              component,
+              ...page.components.slice(index),
+            ],
+          };
+        }
+        return page;
+      }),
+    ]);
+  };
+
+  const onChangeValue = (
+    pageId: string,
+    componentId: string,
+    value: string
+  ) => {
+    setPages((pages) => [
+      ...pages.map((page) =>
+        page.id === pageId
+          ? {
+              ...page,
+              components: [
+                ...page.components.map((component) =>
+                  component.id === componentId
+                    ? { ...component, value }
+                    : component
+                ),
+              ],
+            }
+          : page
+      ),
     ]);
   };
 
@@ -56,7 +121,9 @@ export const FormBuilderProvider: FC<Props> = ({ children }: Props) => {
         {
           onAddPage,
           onAddComponent,
+          onAddBetween,
           onUpdate,
+          onChangeValue,
         },
       ]}
     >

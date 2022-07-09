@@ -6,54 +6,80 @@ import {
   MoreVertOutlined,
 } from '@mui/icons-material';
 import { useDrop } from 'react-dnd';
+import { v4 as uuid } from 'uuid';
 
 import { InputField } from 'components/common/InputField';
+import { useFormBuilder } from 'provider/FormBuilderProvider';
+import { DragAndDropItem, Component } from 'types';
 
 import * as S from './styled';
 
 interface Props {
-  id: string;
-  label: string;
-  width: number;
-  value: string;
-  onChange: (id: string, value: string) => void;
+  component: Component;
+  pageId: string;
 }
 
-const FormItem: FC<Props> = ({ id, label, value, width, onChange }: Props) => {
-  const [{ canDrop, isOver }, drop] = useDrop(() => ({
-    accept: 'FormInput',
-    drop: (item: any, monitor) => {
-      // onAdd(id, item.name, item.label, item.type);
-    },
-    collect: (monitor) => ({
-      isOver: monitor.isOver(),
-      canDrop: monitor.canDrop(),
-    }),
-  }));
+const FormItem: FC<Props> = ({ component, pageId }: Props) => {
+  const [, { onAddBetween, onChangeValue }] = useFormBuilder();
+  const [{ canDrop: canPrevDrop, isOver: isPrevOver }, prevDrop] = useDrop(
+    () => ({
+      accept: 'FormInput',
+      drop: (item: DragAndDropItem, monitor) => {
+        onAddBetween(pageId, component.id, 'prev', {
+          id: uuid(),
+          ...item,
+          width: 6,
+          value: '',
+        });
+      },
+      collect: (monitor) => ({
+        isOver: monitor.isOver(),
+        canDrop: monitor.canDrop(),
+      }),
+    })
+  );
+
+  const [{ canDrop: canNextDrop, isOver: isNextOver }, nextDrop] = useDrop(
+    () => ({
+      accept: 'FormInput',
+      drop: (item: DragAndDropItem, monitor) => {
+        onAddBetween(pageId, component.id, 'njext', {
+          id: uuid(),
+          ...item,
+          width: 6,
+          value: '',
+        });
+      },
+      collect: (monitor) => ({
+        isOver: monitor.isOver(),
+        canDrop: monitor.canDrop(),
+      }),
+    })
+  );
 
   const handleChange = (e: any) => {
     e.preventDefault();
-    onChange(id, e.target.value);
+    onChangeValue(pageId, component.id, e.target.value);
   };
 
   return (
-    <Grid item xs={width} ref={drop}>
+    <Grid item xs={component.width}>
       <S.FormItem>
         <Box
           sx={{
             display: 'flex',
-            alignItems: 'start',
+            alignItems: 'stretch',
             justifyContent: 'between',
           }}
         >
-          <Box>
+          <Box className="icon-move" ref={prevDrop}>
             <IconButton>
               <DragIndicatorOutlined />
             </IconButton>
           </Box>
-          <Box flexGrow={1}>
+          <Box flexGrow={1} ref={nextDrop}>
             <S.LabelContainer>
-              <S.FormLabel>{label}</S.FormLabel>
+              <S.FormLabel>{component.label}</S.FormLabel>
               <Box>
                 <IconButton>
                   <EditOutlined />
@@ -65,7 +91,7 @@ const FormItem: FC<Props> = ({ id, label, value, width, onChange }: Props) => {
             </S.LabelContainer>
             <InputField
               variant="filled"
-              value={value}
+              value={component.value}
               error={false}
               fullWidth
               onChange={handleChange}
