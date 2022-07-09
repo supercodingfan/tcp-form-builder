@@ -19,7 +19,7 @@ const FormPage: FC<Props> = ({ item: { id, isLast, components } }: Props) => {
     accept: 'FormInput',
     drop: (item: DragAndDropItem, monitor) => {
       const didDrop = monitor.didDrop();
-      if (didDrop) {
+      if (didDrop || item.id) {
         return;
       }
       onAddComponent(id, {

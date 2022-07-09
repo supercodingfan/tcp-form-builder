@@ -27,6 +27,7 @@ export type PageItem = {
 };
 
 export type DragAndDropItem = {
+  id?: string;
   label: string;
   name: string;
   type: string;

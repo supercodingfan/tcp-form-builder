@@ -15,6 +15,12 @@ interface ActionsFormBuilder {
   ) => void;
   onUpdate: (id: string, components: Component[]) => void;
   onChangeValue: (pageId: string, componentId: string, value: string) => void;
+  onChangePosition: (
+    pageId: string,
+    sourceComponentId: string,
+    targetComponentId: string,
+    type: string
+  ) => void;
 }
 
 export type TypeFormBuilder = [StateFormBuilder, ActionsFormBuilder];

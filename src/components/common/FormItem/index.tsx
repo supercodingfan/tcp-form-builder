@@ -5,7 +5,7 @@ import {
   EditOutlined,
   MoreVertOutlined,
 } from '@mui/icons-material';
-import { useDrop } from 'react-dnd';
+import { useDrop, useDrag } from 'react-dnd';
 import { v4 as uuid } from 'uuid';
 
 import { InputField } from 'components/common/InputField';
@@ -20,17 +20,22 @@ interface Props {
 }
 
 const FormItem: FC<Props> = ({ component, pageId }: Props) => {
-  const [, { onAddBetween, onChangeValue }] = useFormBuilder();
+  const [, { onAddBetween, onChangeValue, onChangePosition }] =
+    useFormBuilder();
   const [{ canDrop: canPrevDrop, isOver: isPrevOver }, prevDrop] = useDrop(
     () => ({
       accept: 'FormInput',
       drop: (item: DragAndDropItem, monitor) => {
-        onAddBetween(pageId, component.id, 'prev', {
-          id: uuid(),
-          ...item,
-          width: 6,
-          value: '',
-        });
+        if (item.id) {
+          onChangePosition(pageId, item.id, component.id, 'prev');
+        } else {
+          onAddBetween(pageId, component.id, 'prev', {
+            id: uuid(),
+            ...item,
+            width: 6,
+            value: '',
+          });
+        }
       },
       collect: (monitor) => ({
         isOver: monitor.isOver(),
@@ -43,12 +48,16 @@ const FormItem: FC<Props> = ({ component, pageId }: Props) => {
     () => ({
       accept: 'FormInput',
       drop: (item: DragAndDropItem, monitor) => {
-        onAddBetween(pageId, component.id, 'njext', {
-          id: uuid(),
-          ...item,
-          width: 6,
-          value: '',
-        });
+        if (item.id) {
+          onChangePosition(pageId, item.id, component.id, 'next');
+        } else {
+          onAddBetween(pageId, component.id, 'next', {
+            id: uuid(),
+            ...item,
+            width: 6,
+            value: '',
+          });
+        }
       },
       collect: (monitor) => ({
         isOver: monitor.isOver(),
@@ -57,13 +66,26 @@ const FormItem: FC<Props> = ({ component, pageId }: Props) => {
     })
   );
 
+  const [{ isDragging }, drag, dragPreview] = useDrag(() => ({
+    type: 'FormInput',
+    item: {
+      id: component.id,
+      label: component.label,
+      name: component.name,
+      type: component.type,
+    },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  }));
+
   const handleChange = (e: any) => {
     e.preventDefault();
     onChangeValue(pageId, component.id, e.target.value);
   };
 
   return (
-    <Grid item xs={component.width}>
+    <Grid item xs={component.width} ref={dragPreview}>
       <S.FormItem>
         <Box
           sx={{
@@ -73,7 +95,7 @@ const FormItem: FC<Props> = ({ component, pageId }: Props) => {
           }}
         >
           <Box className="icon-move" ref={prevDrop}>
-            <IconButton>
+            <IconButton style={{ cursor: 'move' }} ref={drag}>
               <DragIndicatorOutlined />
             </IconButton>
           </Box>
