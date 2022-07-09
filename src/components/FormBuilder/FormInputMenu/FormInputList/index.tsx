@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { ListItemText, ListItemIcon } from '@mui/material';
+import { ListItemIcon } from '@mui/material';
 import {
   TextFormatOutlined,
   PhoneOutlined,
@@ -10,14 +10,19 @@ import {
   PasswordOutlined,
   AttachFileOutlined,
 } from '@mui/icons-material';
+import { useDrag } from 'react-dnd';
 
 import { FormInputItem } from 'types';
 import { FormInputIcons } from 'types/constants';
 
 import * as S from './styled';
 
-interface Props {
+interface FormInputListProps {
   menu: FormInputItem[];
+}
+
+interface FormInputItemProps {
+  item: FormInputItem;
 }
 
 const getIcon = (type: string) => {
@@ -43,14 +48,33 @@ const getIcon = (type: string) => {
   }
 };
 
-const FormInputList: FC<Props> = ({ menu }: Props) => {
+const ListItem: FC<FormInputItemProps> = ({ item }: FormInputItemProps) => {
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: 'FormInput',
+    item: {
+      name: item.name,
+      type: item.type,
+      label: item.label,
+    },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  }));
+  return (
+    <S.ListItem key={item.label} ref={drag}>
+      <ListItemIcon>{getIcon(item.format)}</ListItemIcon>
+      <S.ListItemText primary={item.label} />
+    </S.ListItem>
+  );
+};
+
+const FormInputList: FC<FormInputListProps> = ({
+  menu,
+}: FormInputListProps) => {
   return (
     <S.FormInputList>
       {menu.map((item) => (
-        <S.ListItem key={item.label}>
-          <ListItemIcon>{getIcon(item.format)}</ListItemIcon>
-          <S.ListItemText primary={item.label} />
-        </S.ListItem>
+        <ListItem key={item.name} item={item} />
       ))}
     </S.FormInputList>
   );
