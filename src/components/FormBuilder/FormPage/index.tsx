@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Box, Grid, Button } from '@mui/material';
+import { Box, Grid, Button, Typography } from '@mui/material';
 import { v4 as uuid } from 'uuid';
 import { useDrop } from 'react-dnd';
 
@@ -22,10 +22,21 @@ const FormPage: FC<Props> = ({ item: { id, isLast, components } }: Props) => {
       if (didDrop || item.id) {
         return;
       }
+      const newItem =
+        item.type === 'select'
+          ? {
+              ...item,
+              options: [
+                { label: 'Option 1', value: 'option1' },
+                { label: 'Option 2', value: 'option2' },
+                { label: 'Option 3', value: 'option3' },
+              ],
+            }
+          : item;
       onAddComponent(id, {
         id: uuid(),
-        ...item,
-        width: 6,
+        ...newItem,
+        width: item.type === 'file' ? 12 : 6,
         value: '',
       });
     },
@@ -37,12 +48,29 @@ const FormPage: FC<Props> = ({ item: { id, isLast, components } }: Props) => {
 
   return (
     <S.FormPage>
-      <Grid container spacing={1} flexGrow={1} ref={drop} pb={2}>
+      <Grid
+        container
+        spacing={1}
+        flexGrow={1}
+        ref={drop}
+        pb={3}
+        style={
+          components.length
+            ? {}
+            : {
+                border: '1px dashed black',
+                borderRadius: '5px',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }
+        }
+      >
         {components.map((item) => {
           return <FormItem key={item.id} component={item} pageId={id} />;
         })}
+        {components.length === 0 && <Typography>Drag Fields Here</Typography>}
       </Grid>
-      <Box display="flex" justifyContent="end">
+      <Box display="flex" justifyContent="end" pt={1}>
         {isLast && (
           <Button
             size="large"

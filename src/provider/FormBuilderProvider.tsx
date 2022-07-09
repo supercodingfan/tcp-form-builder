@@ -169,7 +169,6 @@ export const FormBuilderProvider: FC<Props> = ({ children }: Props) => {
     targetComponentId: string,
     type: string
   ) => {
-    console.log(sourceComponentId, targetComponentId, type);
     setPages((pages) => [
       ...pages.map((page) =>
         page.id === pageId

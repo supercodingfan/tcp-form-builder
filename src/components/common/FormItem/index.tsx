@@ -7,6 +7,7 @@ import {
 } from '@mui/icons-material';
 import { useDrop, useDrag } from 'react-dnd';
 import { v4 as uuid } from 'uuid';
+import { DropzoneArea } from 'mui-file-dropzone';
 
 import { InputField } from 'components/common/InputField';
 import { useFormBuilder } from 'provider/FormBuilderProvider';
@@ -29,10 +30,21 @@ const FormItem: FC<Props> = ({ component, pageId }: Props) => {
         if (item.id) {
           onChangePosition(pageId, item.id, component.id, 'prev');
         } else {
+          const newItem =
+            item.type === 'select'
+              ? {
+                  ...item,
+                  options: [
+                    { label: 'Option 1', value: 'option1' },
+                    { label: 'Option 2', value: 'option2' },
+                    { label: 'Option 3', value: 'option3' },
+                  ],
+                }
+              : item;
           onAddBetween(pageId, component.id, 'prev', {
             id: uuid(),
-            ...item,
-            width: 6,
+            ...newItem,
+            width: item.type === 'file' ? 12 : 6,
             value: '',
           });
         }
@@ -51,10 +63,21 @@ const FormItem: FC<Props> = ({ component, pageId }: Props) => {
         if (item.id) {
           onChangePosition(pageId, item.id, component.id, 'next');
         } else {
+          const newItem =
+            item.type === 'select'
+              ? {
+                  ...item,
+                  options: [
+                    { label: 'Option 1', value: 'option1' },
+                    { label: 'Option 2', value: 'option2' },
+                    { label: 'Option 3', value: 'option3' },
+                  ],
+                }
+              : item;
           onAddBetween(pageId, component.id, 'next', {
             id: uuid(),
-            ...item,
-            width: 6,
+            ...newItem,
+            width: item.type === 'file' ? 12 : 6,
             value: '',
           });
         }
@@ -111,13 +134,32 @@ const FormItem: FC<Props> = ({ component, pageId }: Props) => {
                 </IconButton>
               </Box>
             </S.LabelContainer>
-            <InputField
-              variant="filled"
-              value={component.value}
-              error={false}
-              fullWidth
-              onChange={handleChange}
-            />
+            {component.type === 'file' ? (
+              <DropzoneArea
+                onDelete={() => console.log('DropZoneArea onDelete')}
+                onChange={() => console.log('DropZoneArea onChange')}
+                fileObjects={undefined}
+              />
+            ) : component.type === 'select' ? (
+              <InputField
+                select
+                variant="filled"
+                value={component.value}
+                error={false}
+                data={component.options}
+                fullWidth
+                onChange={handleChange}
+              />
+            ) : (
+              <InputField
+                variant="filled"
+                value={component.value}
+                error={false}
+                type={component.type}
+                fullWidth
+                onChange={handleChange}
+              />
+            )}
           </Box>
         </Box>
       </S.FormItem>
