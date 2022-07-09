@@ -139,7 +139,7 @@ export const FormBuilderProvider: FC<Props> = ({ children }: Props) => {
       ];
     }
 
-    if (targetComponentIndex === components.length && type === 'next') {
+    if (targetComponentIndex === components.length - 1 && type === 'next') {
       return [
         ...components.filter((component) => component.id !== sourceId),
         sourceComponent,

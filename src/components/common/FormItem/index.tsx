@@ -158,8 +158,8 @@ const FormItem: FC<Props> = ({ component, pageId }: Props) => {
                 <IconButton>
                   <EditOutlined />
                 </IconButton>
-                <IconButton>
-                  <MoreVertOutlined onClick={handleOptionMenuOpen} />
+                <IconButton onClick={handleOptionMenuOpen}>
+                  <MoreVertOutlined />
                 </IconButton>
                 <Menu
                   anchorEl={anchorEl}
