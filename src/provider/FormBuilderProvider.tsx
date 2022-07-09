@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { FC, createContext, useState, useEffect, useContext } from 'react';
 import { v4 as uuid } from 'uuid';
 
@@ -186,6 +187,27 @@ export const FormBuilderProvider: FC<Props> = ({ children }: Props) => {
     ]);
   };
 
+  const onUpdateComponent = (
+    pageId: string,
+    componentId: string,
+    component: Component
+  ) => {
+    setPages((pages) => [
+      ...pages.map((page) =>
+        page.id === pageId
+          ? {
+              ...page,
+              components: [
+                ...page.components.map((item) =>
+                  item.id === componentId ? component : item
+                ),
+              ],
+            }
+          : page
+      ),
+    ]);
+  };
+
   return (
     <FormBuilderContext.Provider
       value={[
@@ -199,6 +221,7 @@ export const FormBuilderProvider: FC<Props> = ({ children }: Props) => {
           onUpdate,
           onChangeValue,
           onChangePosition,
+          onUpdateComponent,
         },
       ]}
     >

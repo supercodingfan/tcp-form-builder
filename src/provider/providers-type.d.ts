@@ -21,6 +21,11 @@ interface ActionsFormBuilder {
     targetComponentId: string,
     type: string
   ) => void;
+  onUpdateComponent: (
+    pageId: string,
+    componentId: string,
+    component: Component
+  ) => void;
 }
 
 export type TypeFormBuilder = [StateFormBuilder, ActionsFormBuilder];

@@ -1,5 +1,7 @@
-import { FC } from 'react';
-import { Box, Grid, IconButton } from '@mui/material';
+/* eslint-disable no-nested-ternary */
+/* eslint-disable indent */
+import React, { FC, useState } from 'react';
+import { Box, Grid, IconButton, Menu, MenuItem } from '@mui/material';
 import {
   DragIndicatorOutlined,
   EditOutlined,
@@ -11,6 +13,7 @@ import { DropzoneArea } from 'mui-file-dropzone';
 
 import { InputField } from 'components/common/InputField';
 import { useFormBuilder } from 'provider/FormBuilderProvider';
+import EditFieldModal from 'components/common/EditFieldModal';
 import { DragAndDropItem, Component } from 'types';
 
 import * as S from './styled';
@@ -21,8 +24,15 @@ interface Props {
 }
 
 const FormItem: FC<Props> = ({ component, pageId }: Props) => {
-  const [, { onAddBetween, onChangeValue, onChangePosition }] =
-    useFormBuilder();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [editModalOpened, setEditModalOpened] = useState(false);
+  const isMenuOpen = Boolean(anchorEl);
+  const menuId = `edit-field-menu-${component.id}`;
+
+  const [
+    ,
+    { onAddBetween, onChangeValue, onChangePosition, onUpdateComponent },
+  ] = useFormBuilder();
   const [{ canDrop: canPrevDrop, isOver: isPrevOver }, prevDrop] = useDrop(
     () => ({
       accept: 'FormInput',
@@ -107,6 +117,25 @@ const FormItem: FC<Props> = ({ component, pageId }: Props) => {
     onChangeValue(pageId, component.id, e.target.value);
   };
 
+  const handleOptionMenuOpen = (event: any) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleOpenEditModal = () => {
+    handleMenuClose();
+    setEditModalOpened(true);
+  };
+
+  const handleCloseEditModal = () => setEditModalOpened(false);
+
+  const handleSaveOptions = (item: Component) => {
+    onUpdateComponent(pageId, component.id, item);
+  };
+
   return (
     <Grid item xs={component.width} ref={dragPreview}>
       <S.FormItem>
@@ -130,8 +159,28 @@ const FormItem: FC<Props> = ({ component, pageId }: Props) => {
                   <EditOutlined />
                 </IconButton>
                 <IconButton>
-                  <MoreVertOutlined />
+                  <MoreVertOutlined onClick={handleOptionMenuOpen} />
                 </IconButton>
+                <Menu
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  id={menuId}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={isMenuOpen}
+                  onClose={handleMenuClose}
+                  style={{ top: '60px' }}
+                >
+                  <MenuItem onClick={handleOpenEditModal}>Edit Field</MenuItem>
+                  <MenuItem onClick={handleMenuClose}>Duplicate Field</MenuItem>
+                  <MenuItem onClick={handleMenuClose}>Delete Field</MenuItem>
+                </Menu>
               </Box>
             </S.LabelContainer>
             {component.type === 'file' ? (
@@ -163,6 +212,12 @@ const FormItem: FC<Props> = ({ component, pageId }: Props) => {
           </Box>
         </Box>
       </S.FormItem>
+      <EditFieldModal
+        item={component}
+        open={editModalOpened}
+        handleSave={handleSaveOptions}
+        handleClose={handleCloseEditModal}
+      />
     </Grid>
   );
 };
